@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formular-Validierung Demo</title>
+    <script src="jquery-3.7.1.min.js"></script>
+    <script src="parsley.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="bs-callout bs-callout-warning hidden">
+        <h4>Oh nein!</h4>
+        <p>Dieses Formular scheint ungültig zu sein :(</p>
+    </div>
+
+    <div class="bs-callout bs-callout-info hidden">
+        <h4>Super!</h4>
+        <p>Alles scheint in Ordnung zu sein :)</p>
+    </div>
+
+    <form id="demo-form" data-parsley-validate>
+
+        <!-- Button -->
+        <label for="button">Knopf (Keine Aktion):</label>
+        <button type="button" value="Klick mich">Klick mich</button>
+        <br><br>
+
+        <!-- Checkbox -->
+        <label for="checkbox">Wähle Hobbys:</label><br>
+        <input type="checkbox" name="hobbies[]" id="hobby1" value="ski" data-parsley-mincheck="2"> Skifahren<br>
+        <input type="checkbox" name="hobbies[]" id="hobby2" value="run"> Laufen<br>
+        <input type="checkbox" name="hobbies[]" id="hobby3" value="eat"> Essen<br>
+        <input type="checkbox" name="hobbies[]" id="hobby4" value="sleep"> Schlafen<br>
+        <input type="checkbox" name="hobbies[]" id="hobby5" value="read"> Lesen<br>
+        <input type="checkbox" name="hobbies[]" id="hobby6" value="code"> Programmieren<br><br>
+
+        <!-- Farbwahl -->
+        <label for="color">Wähle deine Lieblingsfarbe:</label>
+        <input type="color" name="color" id="color">
+        <br><br>
+
+        <!-- Datum -->
+        <label for="date">Wähle ein Datum:</label>
+        <input type="date" name="date" id="date" required>
+        <br><br>
+
+        <!-- Datum und Zeit -->
+        <label for="datetime-local">Wähle Datum und Uhrzeit:</label>
+        <input type="datetime-local" name="datetime-local" id="datetime-local" required>
+        <br><br>
+
+        <!-- Zeit -->
+        <label for="time">Wähle eine Uhrzeit:</label>
+        <input type="time" name="time" id="time" required>
+        <br><br>
+
+        <!-- Monat -->
+        <label for="month">Wähle Monat und Jahr:</label>
+        <input type="month" name="month" id="month" required>
+        <br><br>
+
+        <!-- Woche -->
+        <label for="week">Wähle eine Woche:</label>
+        <input type="week" name="week" id="week" required>
+        <br><br>
+
+        <!-- E-Mail -->
+        <label for="email">E-Mail Adresse:</label>
+        <input type="email" name="email" id="email" required data-parsley-type="email" data-parsley-trigger="change">
+        <br><br>
+
+        <!-- Datei-Upload -->
+        <label for="file">Lade eine Datei hoch (PNG, JPG, PDF, DOC, DOCX):</label>
+        <input type="file" name="file" id="file" accept=".png, .jpg, .jpeg, .pdf, .doc, .docx" required>
+        <br><br>
+
+        <!-- Verstecktes Feld -->
+        <input type="hidden" name="hiddenField" value="hiddenValue">
+        <br><br>
+
+        <!-- Bild -->
+        <label for="image">Bild-Upload (Absenden mit Bild):</label>
+        <input type="image" src="submit.png" alt="Absenden" value="submit">
+        <br><br>
+
+        <!-- Nummer -->
+        <label for="number">Gib eine Zahl ein:</label>
+        <input type="number" name="number" id="number" min="1" max="100" required>
+        <br><br>
+
+        <!-- Passwort -->
+        <label for="password">Passwort:</label>
+        <input type="password" name="password" id="password" required>
+        <br><br>
+
+        <!-- Radio-Button -->
+        <label for="contactMethod">Bevorzugte Kontaktmethode:</label><br>
+        <input type="radio" name="contactMethod" value="email" required>E-Mail
+        <input type="radio" name="contactMethod" value="phone">Telefon
+        <br><br>
+
+        <!-- Bereich -->
+        <label for="range">Wähle einen Bereich (1-100):</label>
+        <input type="range" name="range" id="range" min="1" max="100">
+        <br><br>
+
+        <!-- Suche -->
+        <label for="search">Suche:</label>
+        <input type="search" name="search" id="search">
+        <br><br>
+
+        <!-- Telefonnummer -->
+        <label for="tel">Telefonnummer:</label>
+        <input type="tel" name="tel" id="tel" pattern="^\d{11}$" required>
+        <br><br>
+
+        <!-- Text -->
+        <label for="text">Text eingeben:</label>
+        <input type="text" name="text" id="text" required>
+        <br><br>
+
+        <!-- URL -->
+        <label for="url">Website-URL:</label>
+        <input type="url" name="url" id="url" required>
+        <br><br>
+
+        <!-- Formular zurücksetzen -->
+        <input type="reset" value="Formular zurücksetzen">
+        <br><br>
+
+        <!-- Formular senden -->
+        <input type="submit" value="Absenden">
+        <br><br>
+
+    </form>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#file").on("change", function () {
+                var fileInput = $(this)[0];
+                var file = fileInput.files[0];
+                var allowedExtensions = /(\.png|\.jpg|\.jpeg|\.pdf|\.doc|\.docx)$/i;
+                var maxSize = 200 * 1024;
+
+                if (file) {
+                    var fileName = file.name;
+                    var fileSize = file.size;
+
+                    if (!allowedExtensions.exec(fileName)) {
+                        alert("Ungültiger Dateityp. Erlaubt sind nur PNG, JPG, PDF, DOC und DOCX.");
+                        fileInput.value = "";
+                        return;
+                    }
+
+                    if (fileSize > maxSize) {
+                        alert("Die Datei ist zu groß. Sie darf maximal 200 KB haben.");
+                        fileInput.value = "";
+                        return;
+                    }
+                }
+            });
+
+            $("#demo-form").on("submit", function (e) {
+                var fileInput = $("#file")[0];
+                var file = fileInput.files[0];
+
+                if (!fileInput.value) {
+                    alert("Bitte eine gültige Datei auswählen.");
+                    e.preventDefault();
+                    return false;
+                }
+
+                return true;
+            });
+        });
+    </script>
+
+</body>
+
+</html>
