@@ -76,4 +76,3 @@ const data = {
 
 const validate = ajv.compile(schema);
 const valid = validate(data);
-if (!valid) console.log(validate.errors);
